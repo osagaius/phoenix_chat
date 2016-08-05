@@ -14,6 +14,9 @@ defmodule PhoenixChat do
       # Start your own worker by calling: PhoenixChat.Worker.start_link(arg1, arg2, arg3)
       # worker(PhoenixChat.Worker, [arg1, arg2, arg3]),
       supervisor(PhoenixChat.Presence, []),
+      worker(RethinkDB.Connection, [[name: PhoenixChat.Database, host: 'localhost', port: 28015]]),
+      worker(PhoenixChat.PostsChangefeed,[PhoenixChat.Database, [name: PhoenixChat.PostsChangefeed]]),
+
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

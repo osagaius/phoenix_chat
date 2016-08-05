@@ -15,4 +15,6 @@
   "poison": {:hex, :poison, "2.2.0", "4763b69a8a77bd77d26f477d196428b741261a761257ff1cf92753a0d4d24a63", [:mix], []},
   "poolboy": {:hex, :poolboy, "1.5.1", "6b46163901cfd0a1b43d692657ed9d7e599853b3b21b95ae5ae0a777cf9b6ca8", [:rebar], []},
   "postgrex": {:hex, :postgrex, "0.11.2", "139755c1359d3c5c6d6e8b1ea72556d39e2746f61c6ddfb442813c91f53487e8", [:mix], [{:connection, "~> 1.0", [hex: :connection, optional: false]}, {:db_connection, "~> 1.0-rc", [hex: :db_connection, optional: false]}, {:decimal, "~> 1.0", [hex: :decimal, optional: false]}]},
-  "ranch": {:hex, :ranch, "1.2.1", "a6fb992c10f2187b46ffd17ce398ddf8a54f691b81768f9ef5f461ea7e28c762", [:make], []}}
+  "ranch": {:hex, :ranch, "1.2.1", "a6fb992c10f2187b46ffd17ce398ddf8a54f691b81768f9ef5f461ea7e28c762", [:make], []},
+  "rethinkdb": {:hex, :rethinkdb, "0.4.0", "287714c2c7683a1f327ea83bf7a1c4eaaf8141ddf52e785632ef289d3851bc4e", [:mix], [{:connection, "~> 1.0.1", [hex: :connection, optional: false]}, {:poison, "~> 1.5 or ~> 2.0", [hex: :poison, optional: false]}]},
+  "rethinkdb_changefeed": {:hex, :rethinkdb_changefeed, "0.0.1", "b9db545259c1f4a2bc615c4eb1fe56eedbcf71d6ba4bec0be0ecb286967f191d", [:mix], [{:connection, "~> 1.0.1", [hex: :connection, optional: false]}, {:rethinkdb, "~> 0.4.0", [hex: :rethinkdb, optional: false]}]}}

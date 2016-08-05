@@ -1,6 +1,7 @@
 defmodule PhoenixChat.RoomChannel do
   use PhoenixChat.Web, :channel
   alias PhoenixChat.Presence
+  import RethinkDB.Query
 
   def join("rooms:lobby", _, socket) do
     send self(), :after_join
@@ -12,15 +13,22 @@ defmodule PhoenixChat.RoomChannel do
       online_at: :os.system_time(:milli_seconds)
     })
     push socket, "presence_state", Presence.list(socket)
+
+    #TODO Push last 20 messages
+    posts = table("posts") |> PhoenixChat.Database.run
+    push socket, "new_posts", %{value: posts.data}
+
     {:noreply, socket}
   end
 
-  def handle_in("message:new", message, socket) do
-    broadcast! socket, "message:new", %{
+  def handle_in("new:msg", msg, socket) do
+    result = table("posts")
+    |> insert(%{
       user: socket.assigns.user,
-      body: message,
-      timestamp: :os.system_time(:milli_seconds)
-    }
+      text: msg["body"]
+      })
+    |> PhoenixChat.Database.run
+
     {:noreply, socket}
   end
 end
