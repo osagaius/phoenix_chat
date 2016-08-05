@@ -16,23 +16,9 @@ defmodule PhoenixChat.Web do
   below.
   """
 
-  def model do
-    quote do
-      use Ecto.Schema
-
-      import Ecto
-      import Ecto.Changeset
-      import Ecto.Query
-    end
-  end
-
   def controller do
     quote do
       use Phoenix.Controller
-
-      alias PhoenixChat.Repo
-      import Ecto
-      import Ecto.Query
 
       import PhoenixChat.Router.Helpers
       import PhoenixChat.Gettext
@@ -65,9 +51,6 @@ defmodule PhoenixChat.Web do
     quote do
       use Phoenix.Channel
 
-      alias PhoenixChat.Repo
-      import Ecto
-      import Ecto.Query
       import PhoenixChat.Gettext
     end
   end

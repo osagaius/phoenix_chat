@@ -15,7 +15,9 @@ defmodule PhoenixChat.RoomChannel do
     push socket, "presence_state", Presence.list(socket)
 
     #TODO Push last 20 messages
-    posts = table("posts") |> PhoenixChat.Database.run
+    posts = table("posts")
+    |> RethinkDB.Query.order_by("received_at") 
+    |> PhoenixChat.Database.run
     push socket, "new_posts", %{value: posts.data}
 
     {:noreply, socket}
@@ -25,7 +27,8 @@ defmodule PhoenixChat.RoomChannel do
     result = table("posts")
     |> insert(%{
       user: socket.assigns.user,
-      text: msg["body"]
+      text: msg["body"],
+      received_at: :os.system_time(:milli_seconds)
       })
     |> PhoenixChat.Database.run
 
