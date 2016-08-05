@@ -1,26 +1,55 @@
-// Brunch automatically concatenates all files in your
-// watched paths. Those paths can be configured at
-// config.paths.watched in "brunch-config.js".
-//
-// However, those files will only be executed if
-// explicitly imported. The only exception are files
-// in vendor, which are never wrapped in imports and
-// therefore are always executed.
+// NOTE: The contents of this file will only be executed if
+// you uncomment its entry in "web/static/js/app.js".
 
-// Import dependencies
-//
-// If you no longer want to use a dependency, remember
-// to also remove its path from "config.paths.watched".
-import "phoenix_html"
+// To use Phoenix channels, the first step is to import Socket
+// and connect at the socket path in "lib/my_app/endpoint.ex":
 import {Socket, Presence} from "phoenix"
-
-// Socket
-let user = document.getElementById("User").innerText
-let socket = new Socket("/socket", {params: {user: user}})
-socket.connect()
-
-// Presence
 let presences = {}
+
+console.log(Socket);
+console.log(Presence);
+let $username = $("#User")
+$username.off("keypress").on("keypress", e => {
+  if (e.keyCode == 13) {
+    let user = document.getElementById("User").value
+    let socket = new Socket("/socket", {params: {user: user}})
+    socket.connect()
+
+    let channel = socket.channel("rooms:lobby", {})
+    channel.join()
+    .receive("ok", resp => { console.log("Joined successfully", resp) })
+    .receive("error", resp => { console.log("Unable to join", resp) })
+
+    // Now that you are connected, you can join channels with a topic:
+    let messagesContainer = $("#messages")
+    channel.on("new_posts", payload => {
+      messagesContainer.empty()
+      payload.value.forEach(function(item) {
+        messagesContainer.append(`${item.text}<br/>`)
+      });
+    })
+
+    channel.on("presence_state", state => {
+      console.log("presence_state", state);
+      Presence.syncState(presences, state)
+      render(presences)
+    })
+
+    channel.on("presence_diff", diff => {
+      console.log("presence_diff", diff);
+      Presence.syncDiff(presences, diff)
+      render(presences)
+    })
+
+    let $input = $("#message-input")
+    $input.off("keypress").on("keypress", e => {
+      if (e.keyCode == 13) {
+        channel.push("new:msg", {body: $input.val()})
+        $input.val("")
+      }
+    })
+  }
+})
 
 let formatTimestamp = (timestamp) => {
   let date = new Date(timestamp)
@@ -38,46 +67,10 @@ let render = (presences) => {
   userList.innerHTML = Presence.list(presences, listBy)
     .map(presence => `
       <li>
-        <b>${presence.user}</b>
-        <br><small>online since ${presence.onlineAt}</small>
+        ${presence.user}
+        <br>
+        <small>online since ${presence.onlineAt}</small>
       </li>
     `)
     .join("")
 }
-
-// Channels
-let room = socket.channel("room:lobby", {})
-room.on("presence_state", state => {
-  Presence.syncState(presences, state)
-  render(presences)
-})
-
-room.on("presence_diff", diff => {
-  Presence.syncDiff(presences, diff)
-  render(presences)
-})
-
-room.join()
-
-// Chat
-let messageInput = document.getElementById("NewMessage")
-messageInput.addEventListener("keypress", (e) => {
-  if (e.keyCode == 13 && messageInput.value != "") {
-    room.push("message:new", messageInput.value)
-    messageInput.value = ""
-  }
-})
-
-let messageList = document.getElementById("MessageList")
-let renderMessage = (message) => {
-  let messageElement = document.createElement("li")
-  messageElement.innerHTML = `
-    <b>${message.user}</b>
-    <i>${formatTimestamp(message.timestamp)}</i>
-    <p>${message.body}</p>
-  `
-  messageList.appendChild(messageElement)
-  messageList.scrollTop = messageList.scrollHeight;
-}
-
-room.on("message:new", message => renderMessage(message))

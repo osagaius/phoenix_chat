@@ -2,7 +2,7 @@ defmodule PhoenixChat.RoomChannel do
   use PhoenixChat.Web, :channel
   alias PhoenixChat.Presence
 
-  def join("room:lobby", _, socket) do
+  def join("rooms:lobby", _, socket) do
     send self(), :after_join
     {:ok, socket}
   end

@@ -1,16 +1,17 @@
 <div class="row">
-  <div class="col-md-12 alert alert-info">
-    Hello, <span id="User"><%= @conn.params["user"] %></span>!
+  <input id="User" class="form-control" />
+
+  <header class="header">
+    <h1>Posts</h1>
+  </header>
+
+  <div id="messages" class="container">
   </div>
-  <div class="col-md-8">
-    <h2>Messages</h2>
-    <ul id="MessageList" class="list-unstyled" style="height: 300px; border: 1px solid #ccc; overflow-y: auto; padding: 20px"></ul>
-    <input type="text" id="NewMessage" placeholder="Type and press enter..." class="form-control">
+
+  <div id="UserList" class="container">
   </div>
-  <div  class="col-md-4">
-    <h2>Who’s Online</h2>
-    <ul id="UserList" class="list-unstyled">
-      <li>Loading online users...</li>
-    </ul>
+
+  <div class="col-sm-10">
+    <input id="message-input" class="form-control" />
   </div>
 </div>
