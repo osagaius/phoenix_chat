@@ -4,6 +4,8 @@
 // To use Phoenix channels, the first step is to import Socket
 // and connect at the socket path in "lib/my_app/endpoint.ex":
 import {Socket, Presence} from "phoenix"
+import moment from 'moment';
+
 let presences = {}
 
 console.log(Socket);
@@ -25,7 +27,8 @@ $username.off("keypress").on("keypress", e => {
     channel.on("new_posts", payload => {
       messagesContainer.empty()
       payload.value.forEach(function(item) {
-        messagesContainer.append(`${item.text}<br/>`)
+        let received_at = moment(item.received_at).calendar()
+        messagesContainer.append(`${item.user} posted ${received_at} :<br/>${item.text}<br/>`)
       });
     })
 
