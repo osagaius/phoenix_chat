@@ -8,8 +8,6 @@ import moment from 'moment';
 
 let presences = {}
 
-console.log(Socket);
-console.log(Presence);
 let $username = $("#User")
 $username.off("keypress").on("keypress", e => {
   if (e.keyCode == 13) {
@@ -22,7 +20,6 @@ $username.off("keypress").on("keypress", e => {
     .receive("ok", resp => { console.log("Joined successfully", resp) })
     .receive("error", resp => { console.log("Unable to join", resp) })
 
-    // Now that you are connected, you can join channels with a topic:
     let messagesContainer = $("#messages")
     channel.on("new_posts", payload => {
       messagesContainer.empty()
@@ -32,14 +29,18 @@ $username.off("keypress").on("keypress", e => {
       });
     })
 
+    let totalPosts = $("#total_posts")
+    channel.on("total_posts_changed", payload => {
+      totalPosts.empty()
+      totalPosts.append(`${payload.value}`)
+    })
+
     channel.on("presence_state", state => {
-      console.log("presence_state", state);
       Presence.syncState(presences, state)
       render(presences)
     })
 
     channel.on("presence_diff", diff => {
-      console.log("presence_diff", diff);
       Presence.syncDiff(presences, diff)
       render(presences)
     })

@@ -2,6 +2,7 @@ defmodule PhoenixChat.PostsChangefeed do
   use RethinkDB.Changefeed
 
   require Logger
+  alias RethinkDB.Record
 
   import RethinkDB.Lambda
   import RethinkDB.Query
@@ -38,11 +39,23 @@ defmodule PhoenixChat.PostsChangefeed do
 
     publish_update(sorted_posts)
 
+    #TODO Move to separate changefeed
+    total_posts = table("posts")
+    |> count
+    |> PhoenixChat.Database.run
+    |> Map.get(:data)
+
+    publish_total_posts_changed(total_posts)
+
     {:next, {db, posts}}
   end
 
   defp publish_update(val) do
     PhoenixChat.Endpoint.broadcast_from! self(), "rooms:lobby", "new_posts", %{value: val}
+  end
+
+  defp publish_total_posts_changed(val) do
+    PhoenixChat.Endpoint.broadcast_from! self(), "rooms:lobby", "total_posts_changed", %{value: val}
   end
 
   def handle_call(:get, _from, {db, nil}) do

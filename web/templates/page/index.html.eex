@@ -1,4 +1,6 @@
 <div class="row">
+  <p class="alert alert-info" id="total_posts" role="alert"></p>
+
   <input id="User" class="form-control" />
 
   <header class="header">
