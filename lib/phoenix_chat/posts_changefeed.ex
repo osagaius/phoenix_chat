@@ -28,8 +28,15 @@ defmodule PhoenixChat.PostsChangefeed do
       _ -> :ok
     end)
 
-    posts = table("posts") |> PhoenixChat.Database.run
-    publish_update(posts.data)
+    result = table("posts")
+    |> order_by(desc("received_at"))
+    |> limit(20)
+    |> order_by(asc("received_at"))
+    |> PhoenixChat.Database.run
+
+    sorted_posts = result.data
+
+    publish_update(sorted_posts)
 
     {:next, {db, posts}}
   end

@@ -14,11 +14,14 @@ defmodule PhoenixChat.RoomChannel do
     })
     push socket, "presence_state", Presence.list(socket)
 
-    #TODO Push last 20 messages
-    posts = table("posts")
-    |> RethinkDB.Query.order_by("received_at") 
+    result = table("posts")
+    |> order_by(desc("received_at"))
+    |> limit(20)
+    |> order_by(asc("received_at"))
     |> PhoenixChat.Database.run
-    push socket, "new_posts", %{value: posts.data}
+
+    sorted_posts = result.data
+    push socket, "new_posts", %{value: sorted_posts}
 
     {:noreply, socket}
   end
