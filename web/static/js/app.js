@@ -8,52 +8,55 @@ import moment from 'moment';
 
 let presences = {}
 
-let $username = $("#User")
-$username.off("keypress").on("keypress", e => {
+let user = document.getElementById("User").innerText
+let socket = new Socket("/socket", {params: {user: user}})
+socket.connect()
+
+let channel = socket.channel("rooms:lobby", {})
+channel.join()
+.receive("ok", resp => { console.log("Joined successfully", resp) })
+.receive("error", resp => { console.log("Unable to join", resp) })
+
+let messagesContainer = $("#MessageList")
+channel.on("new_posts", payload => {
+  messagesContainer.empty()
+  payload.value.forEach(function(message) {
+    let received_at = moment(message.received_at).calendar()
+    messagesContainer.append(
+      `
+      <b>${message.user}</b>
+      <i>${received_at}</i>
+      <p>${message.text}</p>
+      `
+    )
+  });
+  messagesContainer.scrollTop(1300);
+})
+
+let totalPosts = $("#total_posts")
+channel.on("total_posts_changed", payload => {
+  totalPosts.empty()
+  totalPosts.append(`${payload.value}`)
+})
+
+channel.on("presence_state", state => {
+  presences = Presence.syncState(presences, state)
+  render(presences)
+})
+
+channel.on("presence_diff", diff => {
+  presences = Presence.syncDiff(presences, diff)
+  render(presences)
+})
+
+let $input = $("#NewMessage")
+$input.off("keypress").on("keypress", e => {
   if (e.keyCode == 13) {
-    let user = document.getElementById("User").value
-    let socket = new Socket("/socket", {params: {user: user}})
-    socket.connect()
-
-    let channel = socket.channel("rooms:lobby", {})
-    channel.join()
-    .receive("ok", resp => { console.log("Joined successfully", resp) })
-    .receive("error", resp => { console.log("Unable to join", resp) })
-
-    let messagesContainer = $("#messages")
-    channel.on("new_posts", payload => {
-      messagesContainer.empty()
-      payload.value.forEach(function(item) {
-        let received_at = moment(item.received_at).calendar()
-        messagesContainer.append(`${item.user} posted ${received_at} :<br/>${item.text}<br/>`)
-      });
-    })
-
-    let totalPosts = $("#total_posts")
-    channel.on("total_posts_changed", payload => {
-      totalPosts.empty()
-      totalPosts.append(`${payload.value}`)
-    })
-
-    channel.on("presence_state", state => {
-      Presence.syncState(presences, state)
-      render(presences)
-    })
-
-    channel.on("presence_diff", diff => {
-      Presence.syncDiff(presences, diff)
-      render(presences)
-    })
-
-    let $input = $("#message-input")
-    $input.off("keypress").on("keypress", e => {
-      if (e.keyCode == 13) {
-        channel.push("new:msg", {body: $input.val()})
-        $input.val("")
-      }
-    })
+    channel.push("new:msg", {body: $input.val()})
+    $input.val("")
   }
 })
+
 
 let formatTimestamp = (timestamp) => {
   let date = new Date(timestamp)
@@ -69,12 +72,11 @@ let listBy = (user, {metas: metas}) => {
 let userList = document.getElementById("UserList")
 let render = (presences) => {
   userList.innerHTML = Presence.list(presences, listBy)
-    .map(presence => `
-      <li>
-        ${presence.user}
-        <br>
-        <small>online since ${presence.onlineAt}</small>
-      </li>
+  .map(presence => `
+    <li>
+      <b>${presence.user}</b>
+      <br><small>online since ${presence.onlineAt}</small>
+    </li>
     `)
     .join("")
-}
+  }
