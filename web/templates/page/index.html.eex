@@ -13,4 +13,11 @@
       <li>Loading online users...</li>
     </ul>
   </div>
+  <div class="col-md-3 alert alert-warning">
+    Total Messages
+    <hr />
+    <p id="total_posts">
+
+    </p>
+  </div>
 </div>

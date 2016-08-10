@@ -23,6 +23,12 @@ defmodule PhoenixChat.RoomChannel do
     sorted_posts = result.data
     push socket, "new_posts", %{value: sorted_posts}
 
+    total_posts = table("posts")
+    |> count
+    |> PhoenixChat.Database.run
+    |> Map.get(:data)
+    push socket, "total_posts_changed", %{value: total_posts}
+
     {:noreply, socket}
   end
 
