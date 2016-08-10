@@ -1,7 +1,10 @@
 import { combineReducers } from 'redux';
 
-const reducers = {
+import {channel, messages} from './message'
 
+const reducers = {
+  channel: channel,
+  messages: messages
 };
 
 export default reducers;
