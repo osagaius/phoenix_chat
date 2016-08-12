@@ -24,7 +24,7 @@ class App extends Component {
     let { dispatch } = this.props;
     dispatch(sendNewMessage(text))
   }
-  
+
   render() {
     if (this.props.user.username) {
       return (
@@ -33,7 +33,10 @@ class App extends Component {
             messages={this.props.messages.value}
             handleMessageInput={this.handleMessageInput.bind(this)}
             />
-          <SideBar handleUserLeave={this.handleUserLeave.bind(this)}/>
+          <SideBar
+            handleUserLeave={this.handleUserLeave.bind(this)}
+            presences={this.props.presences.value ? this.props.presences.value : {}}
+            />
         </div>
       )
     } else {
@@ -45,7 +48,8 @@ class App extends Component {
 function mapStateToProps(state) {
   return {
     messages: state.messages,
-    user: state.user
+    user: state.user,
+    presences: state.presences
   };
 }
 

@@ -6,7 +6,7 @@ import TotalPosts from './total_posts'
 const SideBar = (props) => {
   return (
     <div className="col-md-4">
-      <OnlineUsersList/>
+      <OnlineUsersList presences={props.presences}/>
       <TotalPosts />
       <button onClick={props.handleUserLeave}
         type="button" className="btn btn-warning">

@@ -1,5 +1,6 @@
-import { Socket } from 'phoenix'
+import { Socket, Presence } from 'phoenix'
 import {newPosts} from './message'
+import {newPresences} from './presences'
 
 export const JOIN_CHANNEL_SUCCESS = 'JOIN_CHANNEL_SUCCESS';
 function joinChannelSuccess(username, socket, channel) {
@@ -35,7 +36,22 @@ export function openChannel(username) {
     channel.on("new_posts", payload => {
       dispatch(newPosts(payload));
     })
+
+    channel.on("presence_state", state => {
+      let syncedPresences = Presence.syncState(getInitialPresences(getState()), state)
+      dispatch(newPresences(syncedPresences));
+    })
+
+    channel.on("presence_diff", diff => {
+      let syncedPresences = Presence.syncDiff(getInitialPresences(getState()), diff)
+      dispatch(newPresences(syncedPresences));
+    })
   }
+}
+
+function getInitialPresences(state) {
+  //TODO Handle this in reducer?
+  return state.presences.value ? state.presences.value : {}
 }
 
 export function closeChannel() {

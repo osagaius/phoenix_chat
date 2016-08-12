@@ -10,8 +10,6 @@ export function messages(state = {}, action) {
       });
 
     case SEND_MESSAGE_REQUEST:
-      return state;
-
     default:
       return state;
   }
