@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux';
 
-import {channel, messages} from './message'
+import {messages} from './message'
+import {user} from './user'
 
 const reducers = {
-  channel: channel,
+  user: user,
   messages: messages
 };
 

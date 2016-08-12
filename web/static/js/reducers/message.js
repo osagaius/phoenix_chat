@@ -1,15 +1,5 @@
-import { JOIN_CHANNEL, LEAVE_CHANNEL, NEW_MESSAGES
+import { MESSAGE_INPUT_CHANGED, NEW_MESSAGES
 } from '../actions/message';
-
-export function channel(state = {}, action) {
-  switch (action.type) {
-    case JOIN_CHANNEL:
-      return state;
-
-    default:
-      return state;
-  }
-}
 
 export function messages(state = {}, action) {
   switch (action.type) {
@@ -18,6 +8,9 @@ export function messages(state = {}, action) {
         value: action.messages.value,
         lastUpdated: action.receivedAt
       });
+
+    case MESSAGE_INPUT_CHANGED:
+      return state;
 
     default:
       return state;

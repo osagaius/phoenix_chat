@@ -1,36 +1,42 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import {openChannel, leaveChannel} from '../actions/message'
+import {openChannel, leaveChannel} from '../actions/user'
 
 import MessageBox from '../components/message_box'
 import SideBar from '../components/sidebar'
 import TotalPosts from '../components/total_posts'
+import UserNameInput from '../components/user_name_input'
 
 class App extends Component {
-  componentWillUnmount() {
+  handleUserLeave() {
     let { dispatch } = this.props;
     dispatch(leaveChannel())
   }
 
-  componentWillMount() {
+  handleUserJoin(username) {
     let { dispatch } = this.props;
-    dispatch(openChannel())
+    dispatch(openChannel(username))
   }
 
   render() {
-    return (
-      <div>
-        <MessageBox messages={this.props.messages.value}/>
-        <SideBar/>
-      </div>
-    )
+    if (this.props.user.username) {
+      return (
+        <div>
+          <MessageBox messages={this.props.messages.value}/>
+          <SideBar/>
+        </div>
+      )
+    } else {
+      return <UserNameInput handleUserJoin={this.handleUserJoin.bind(this)}/>
+    }
   }
 }
 
 function mapStateToProps(state) {
   return {
-    messages: state.messages
+    messages: state.messages,
+    user: state.user
   };
 }
 
