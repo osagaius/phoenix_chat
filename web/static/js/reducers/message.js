@@ -1,4 +1,4 @@
-import { MESSAGE_INPUT_CHANGED, NEW_MESSAGES
+import { SEND_MESSAGE_REQUEST, NEW_MESSAGES
 } from '../actions/message';
 
 export function messages(state = {}, action) {
@@ -9,7 +9,7 @@ export function messages(state = {}, action) {
         lastUpdated: action.receivedAt
       });
 
-    case MESSAGE_INPUT_CHANGED:
+    case SEND_MESSAGE_REQUEST:
       return state;
 
     default:
