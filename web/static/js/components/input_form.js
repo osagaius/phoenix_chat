@@ -12,6 +12,7 @@ var UserNameInput = React.createClass({
     event.preventDefault();
     if(this.state.input.trim().length > 1) {
       this.props.handleSubmit(this.state.input)
+      this.setState({input: ""});
     }
   },
 

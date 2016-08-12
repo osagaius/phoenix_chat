@@ -23,7 +23,7 @@ class OnlineUsersList extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{marginBottom: 200}}>
         <h2>Who’s Online</h2>
         <ul id="UserList" className="list-unstyled">
           {this.renderUsers()}
