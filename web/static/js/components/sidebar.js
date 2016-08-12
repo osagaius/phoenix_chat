@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react'
 
 import OnlineUsersList from './online_users_list'
-import TotalPosts from './total_posts'
+import TotalMessages from './total_messages'
 
 const SideBar = (props) => {
   return (
     <div className="col-md-4">
       <OnlineUsersList presences={props.presences}/>
-      <TotalPosts />
+      <TotalMessages totalMessages={props.totalMessages} />
       <button onClick={props.handleUserLeave}
         type="button" className="btn btn-warning">
         Leave

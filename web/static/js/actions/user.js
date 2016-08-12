@@ -1,6 +1,7 @@
 import { Socket, Presence } from 'phoenix'
 import {newPosts} from './message'
 import {newPresences} from './presences'
+import {newMessagesTotal} from './messages_total'
 
 export const JOIN_CHANNEL_SUCCESS = 'JOIN_CHANNEL_SUCCESS';
 function joinChannelSuccess(username, socket, channel) {
@@ -45,6 +46,10 @@ export function openChannel(username) {
     channel.on("presence_diff", diff => {
       let syncedPresences = Presence.syncDiff(getInitialPresences(getState()), diff)
       dispatch(newPresences(syncedPresences));
+    })
+
+    channel.on("total_posts_changed", payload => {
+      dispatch(newMessagesTotal(payload.value));
     })
   }
 }

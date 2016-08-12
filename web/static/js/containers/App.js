@@ -6,7 +6,6 @@ import {sendNewMessage} from '../actions/message'
 
 import MessageBox from '../components/message_box'
 import SideBar from '../components/sidebar'
-import TotalPosts from '../components/total_posts'
 import UserNameInput from '../components/user_name_input'
 
 class App extends Component {
@@ -36,6 +35,7 @@ class App extends Component {
           <SideBar
             handleUserLeave={this.handleUserLeave.bind(this)}
             presences={this.props.presences.value ? this.props.presences.value : {}}
+            totalMessages={this.props.messagesTotal.value}
             />
         </div>
       )
@@ -49,7 +49,8 @@ function mapStateToProps(state) {
   return {
     messages: state.messages,
     user: state.user,
-    presences: state.presences
+    presences: state.presences,
+    messagesTotal: state.messagesTotal
   };
 }
 

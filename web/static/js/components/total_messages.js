@@ -1,15 +1,15 @@
 import React, { PropTypes } from 'react'
 
-const TotalPosts = (props) => {
+const TotalMessages = (props) => {
   return (
     <div className="alert-success">
       Total Messages
       <hr />
       <p>
-
+        {props.totalMessages}
       </p>
     </div>
   )
 }
 
-export default TotalPosts
+export default TotalMessages
