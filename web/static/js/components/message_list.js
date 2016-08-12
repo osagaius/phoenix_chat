@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import moment from 'moment';
+import ReactDOM from 'react-dom';
 
 const styles={
   list: {
@@ -11,6 +12,10 @@ const styles={
 }
 
 class MessageList extends React.Component {
+  componentDidMount() {
+    this._div.scrollTop = styles.list.height * 2
+  }
+
   renderMessages() {
     return this.props.messages.map(function(message) {
       return <li key={message.id}>
@@ -23,9 +28,11 @@ class MessageList extends React.Component {
 
   render () {
     return (
-      <ul className="list-unstyled" style={styles.list}>
-        {this.renderMessages()}
-      </ul>
+      <div style={styles.list} ref={(ref) => this._div = ref} >
+        <ul className="list-unstyled">
+          {this.renderMessages()}
+        </ul>
+      </div>
     )
   }
 }
