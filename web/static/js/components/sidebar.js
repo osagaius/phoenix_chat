@@ -8,6 +8,10 @@ const SideBar = (props) => {
     <div className="col-md-4">
       <OnlineUsersList/>
       <TotalPosts />
+      <button onClick={props.handleUserLeave}
+        type="button" className="btn btn-warning">
+        Leave
+      </button>
     </div>
   )
 }

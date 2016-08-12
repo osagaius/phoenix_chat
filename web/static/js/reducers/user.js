@@ -20,6 +20,10 @@ export function user(state = {}, action) {
       });
 
     case LEAVE_CHANNEL:
+      return Object.assign({}, state, {
+        username: null
+      });
+    
     default:
       return state;
   }

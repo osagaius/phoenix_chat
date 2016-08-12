@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import {openChannel, leaveChannel} from '../actions/user'
+import {openChannel, closeChannel} from '../actions/user'
 
 import MessageBox from '../components/message_box'
 import SideBar from '../components/sidebar'
@@ -11,7 +11,7 @@ import UserNameInput from '../components/user_name_input'
 class App extends Component {
   handleUserLeave() {
     let { dispatch } = this.props;
-    dispatch(leaveChannel())
+    dispatch(closeChannel())
   }
 
   handleUserJoin(username) {
@@ -24,7 +24,7 @@ class App extends Component {
       return (
         <div>
           <MessageBox messages={this.props.messages.value}/>
-          <SideBar/>
+          <SideBar handleUserLeave={this.handleUserLeave.bind(this)}/>
         </div>
       )
     } else {

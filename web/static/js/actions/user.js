@@ -40,8 +40,7 @@ export function openChannel(username) {
 
 export function closeChannel() {
   return (dispatch, getState) => {
+    getState().user.channel.leave()
     dispatch(leaveChannel());
-
-    getState.user.channel.leave()
   }
 }
