@@ -5,12 +5,12 @@ var UserNameInput = React.createClass({
     return {input: ""}
   },
   handleChange(event) {
-    this.setState({input: event.target.value.substr(0, 140).trim()});
+    this.setState({input: event.target.value.substr(0, 140)});
   },
 
   handleSubmit(event) {
     event.preventDefault();
-    if(this.state.input.length > 1) {
+    if(this.state.input.trim().length > 1) {
       this.props.handleSubmit(this.state.input)
     }
   },
