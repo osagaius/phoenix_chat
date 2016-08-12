@@ -1,4 +1,3 @@
-var Config = require('Config')
 import { Socket } from 'phoenix'
 import {newPosts} from './message'
 
