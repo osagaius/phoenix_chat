@@ -1,23 +1,2 @@
-<div class="row">
-  <div class="col-md-12 alert alert-info">
-    Hello, <span id="User"><%= @conn.params["user"] %></span>!
-  </div>
-  <div class="col-md-8">
-    <h2>Messages</h2>
-    <ul id="MessageList" class="list-unstyled" style="height: 300px; border: 1px solid #ccc; overflow-y: auto; padding: 20px"></ul>
-    <input type="text" id="NewMessage" placeholder="Type and press enter..." class="form-control">
-  </div>
-  <div  class="col-md-4">
-    <h2>Who’s Online</h2>
-    <ul id="UserList" class="list-unstyled">
-      <li>Loading online users...</li>
-    </ul>
-  </div>
-  <div class="col-md-3 alert alert-warning">
-    Total Messages
-    <hr />
-    <p id="total_posts">
-
-    </p>
-  </div>
+<div id="root">
 </div>
